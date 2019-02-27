@@ -1,4 +1,4 @@
-package com.techreinforec.countypickerlibrary;
+package com.techreinforce.countypickerlibrary;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

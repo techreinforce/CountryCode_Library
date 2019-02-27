@@ -1,4 +1,4 @@
-package com.techreinforec.country_code_library;
+package com.techreinforce.countypickerlibrary;
 
 import org.junit.Test;
 

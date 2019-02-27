@@ -1,4 +1,4 @@
-package com.techreinforec.countypickerlibrary;
+package com.techreinforce.country_code_library;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.techreinforec.countypickerlibrary.test", appContext.getPackageName());
+        assertEquals("com.techreinforec.country_code_library", appContext.getPackageName());
     }
 }

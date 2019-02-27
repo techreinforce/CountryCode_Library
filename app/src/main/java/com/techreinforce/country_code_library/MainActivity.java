@@ -1,11 +1,11 @@
-package com.techreinforec.country_code_library;
+package com.techreinforce.country_code_library;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.techreinforec.countypickerlibrary.CountryPicker;
-import com.techreinforec.countypickerlibrary.CountryPickerListener;
+import com.techreinforce.countypickerlibrary.CountryPicker;
+import com.techreinforce.countypickerlibrary.CountryPickerListener;
 
 public class MainActivity extends AppCompatActivity {
     String countrypicker = "COUNTRY_PICKER";
