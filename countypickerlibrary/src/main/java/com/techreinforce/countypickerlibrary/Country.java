@@ -3,8 +3,7 @@ package com.techreinforce.countypickerlibrary;
 /**
  * Created by embed on 6/9/16.
  */
-public class Country
-{
+public class Country {
     private String code;
     private String name;
     private String dialCode;
@@ -59,4 +58,14 @@ public class Country
     public void setMaxDigits(int maxDigits) {
         this.maxDigits = maxDigits;
     }
+
+    @Override
+    public String toString() {
+        String output = "Name: " + getName() + " code: " + getCode() +
+                " dialCode: " + getDialCode() + " flag: " + getFlag() +
+                " minDigits: " + getMinDigits() + " maxDigits: " + getMaxDigits();
+
+        return output;
+    }
+
 }

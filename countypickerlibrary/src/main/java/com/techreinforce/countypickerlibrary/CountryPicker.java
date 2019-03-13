@@ -205,4 +205,26 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
             return 0;
         }
     }
+
+
+    public Country getCountryInfo(Context context, String countryCode) {
+        this.context = context;
+        getAllCountries();
+      /*   String countryIsoCode;
+
+       TelephonyManager telephonyManager =
+                (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        countryIsoCode = telephonyManager.getNetworkCountryIso();*/
+        String countryDialCode = countryCode;
+        for (int i = 0; i < allCountriesList.size(); i++) {
+            Country country = allCountriesList.get(i);
+            if (country.getDialCode().equalsIgnoreCase(countryDialCode)) {
+                country.setFlag(getFlagResId(country.getCode()));
+                return country;
+            }
+        }
+        return afghanistan();
+    }
+
+
 }
