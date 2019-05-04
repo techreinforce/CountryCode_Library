@@ -75,7 +75,7 @@ public class CountryListAdapter extends BaseAdapter
         } else
             cell = (Cell) cellView.getTag();
 
-        cell.textView.setText(country.getName()+" ("+ country.getCode()+")");
+        cell.textView.setText(country.getName()+" ("+ country.getDialCode()+")");
         String drawableName = "flag_"
                 + country.getCode().toLowerCase(Locale.ENGLISH);
 //        Utility.printLog(TAG+" drawableName  "+drawableName);
