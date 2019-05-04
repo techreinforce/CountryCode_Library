@@ -1,10 +1,10 @@
 package com.techreinforce.countypickerlibrary;
 
 import android.annotation.SuppressLint;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
