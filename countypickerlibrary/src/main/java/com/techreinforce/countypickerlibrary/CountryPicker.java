@@ -1,10 +1,10 @@
 package com.techreinforce.countypickerlibrary;
 
 import android.annotation.SuppressLint;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -46,6 +46,22 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
     private CountryPickerListener listener;
     private Context context;
 
+    private static String readEncodedJsonString() throws java.io.IOException {
+        byte[] data = Base64.decode(Constants.ENCODED_COUNTRY_CODE, Base64.DEFAULT);
+        return new String(data, "UTF-8");
+    }
+
+    /**
+     * To support show as dialog
+     */
+    public static CountryPicker newInstance(String dialogTitle) {
+        CountryPicker picker = new CountryPicker();
+        Bundle bundle = new Bundle();
+        bundle.putString("dialogTitle", dialogTitle);
+        picker.setArguments(bundle);
+        return picker;
+    }
+
     public void setListener(CountryPickerListener listener) {
         this.listener = listener;
     }
@@ -81,22 +97,6 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
             }
         }
         return null;
-    }
-
-    private static String readEncodedJsonString() throws java.io.IOException {
-        byte[] data = Base64.decode(Constants.ENCODED_COUNTRY_CODE, Base64.DEFAULT);
-        return new String(data, "UTF-8");
-    }
-
-    /**
-     * To support show as dialog
-     */
-    public static CountryPicker newInstance(String dialogTitle) {
-        CountryPicker picker = new CountryPicker();
-        Bundle bundle = new Bundle();
-        bundle.putString("dialogTitle", dialogTitle);
-        picker.setArguments(bundle);
-        return picker;
     }
 
     @Override
@@ -156,6 +156,9 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
         selectedCountriesList.clear();
         for (Country country : allCountriesList) {
             if (country.getName().toLowerCase(Locale.ENGLISH).contains(text.toLowerCase())) {
+                selectedCountriesList.add(country);
+            }
+            if (country.getCode().toLowerCase(Locale.ENGLISH).contains(text.toLowerCase())) {
                 selectedCountriesList.add(country);
             }
         }
