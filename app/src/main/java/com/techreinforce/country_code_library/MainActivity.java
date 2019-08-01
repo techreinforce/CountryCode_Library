@@ -41,18 +41,20 @@ public class MainActivity extends AppCompatActivity {
                     mCountryPicker.dismiss();
             }
         });*/
-        Log.d("sfgsdffdgdf", String.valueOf(mCountryPicker.getUserCountryInfo(this).toString()));
-        Log.d("sfgsdffdgdf", String.valueOf(mCountryPicker.getCountryInfo(this, "+91").toString()));
+        Log.d("sfgsdffdgdf1 : ", mCountryPicker.getUserCountryInfo(this).toString());
+        Log.d("sfgsdffdgdf2 : ", mCountryPicker.getCountryInfo(this, "+91").toString());
+        Log.d("sfgsdffdgdf3 : ", mCountryPicker.getCountryInfoFromCountryCode(this, "US").toString());
+        Log.d("sfgsdffdgdf4 : ", mCountryPicker.getUserCountryInfoLocal(this).toString()+"");
 
 
     }
 
     public void findData(View view) {
         Country country = mCountryPicker.getCountryInfo(this, editText.getText().toString());
-        Log.d("sfgsdffdgdf", String.valueOf(country.getCode()));
-        Log.d("sfgsdffdgdf", String.valueOf(country.getDialCode()));
-        Log.d("sfgsdffdgdf", String.valueOf(country.getName()));
-        Log.d("sfgsdffdgdf", String.valueOf(country.getFlag()));
+        Log.d("sfgsdffdgdf1", String.valueOf(country.getCode()));
+        Log.d("sfgsdffdgdf2", String.valueOf(country.getDialCode()));
+        Log.d("sfgsdffdgdf3", String.valueOf(country.getName()));
+        Log.d("sfgsdffdgdf4", String.valueOf(country.getFlag()));
         textView.setText(country.getCode());
     }
 }

@@ -183,6 +183,22 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
         }
         return afghanistan();
     }
+    public Country getUserCountryInfoLocal(Context context) {
+        this.context = context;
+        getAllCountries();
+        String countryIsoCode;
+
+//        String locale = context.getResources().getConfiguration().locale.getCountry();  "US"
+//        String locale = context.getResources().getConfiguration().locale.getDisplayCountry();  "United States"
+        for (int i = 0; i < allCountriesList.size(); i++) {
+            Country country = allCountriesList.get(i);
+            if (country.getCode().equalsIgnoreCase(context.getResources().getConfiguration().locale.getCountry())) {
+                country.setFlag(getFlagResId(country.getCode()));
+                return country;
+            }
+        }
+        return afghanistan();
+    }
 
     private Country afghanistan() {
         Country country = new Country();
@@ -207,7 +223,7 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
     }
 
 
-    public Country getCountryInfo(Context context, String countryCode) {
+    public Country getCountryInfo(Context context, String countryDialCode) {
         this.context = context;
         getAllCountries();
       /*   String countryIsoCode;
@@ -215,10 +231,29 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
        TelephonyManager telephonyManager =
                 (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         countryIsoCode = telephonyManager.getNetworkCountryIso();*/
-        String countryDialCode = countryCode;
+//        String countryDialCode = countryDialCode;
         for (int i = 0; i < allCountriesList.size(); i++) {
             Country country = allCountriesList.get(i);
             if (country.getDialCode().equalsIgnoreCase(countryDialCode)) {
+                country.setFlag(getFlagResId(country.getCode()));
+                return country;
+            }
+        }
+        return afghanistan();
+    }
+
+    public Country getCountryInfoFromCountryCode(Context context, String countryCode) {
+        this.context = context;
+        getAllCountries();
+      /*   String countryIsoCode;
+
+       TelephonyManager telephonyManager =
+                (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        countryIsoCode = telephonyManager.getNetworkCountryIso();*/
+//        String countryDialCode = countryCode;
+        for (int i = 0; i < allCountriesList.size(); i++) {
+            Country country = allCountriesList.get(i);
+            if (country.getCode().equalsIgnoreCase(countryCode)) {
                 country.setFlag(getFlagResId(country.getCode()));
                 return country;
             }
