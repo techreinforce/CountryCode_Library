@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.techreinforce.countypickerlibrary.Country;
 import com.techreinforce.countypickerlibrary.CountryPicker;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
     String countrypicker = "COUNTRY_PICKER";
     CountryPicker mCountryPicker = new CountryPicker();
@@ -50,6 +52,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void findData(View view) {
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.add("PH");
+        arrayList.add("MY");
+        arrayList.add("AU");
+        mCountryPicker.showCountries(arrayList);
+//        mCountryPicker.hideCountries(arrayList);
+
         Country country = mCountryPicker.getCountryInfo(this, editText.getText().toString());
         Log.d("sfgsdffdgdf1", String.valueOf(country.getCode()));
         Log.d("sfgsdffdgdf2", String.valueOf(country.getDialCode()));

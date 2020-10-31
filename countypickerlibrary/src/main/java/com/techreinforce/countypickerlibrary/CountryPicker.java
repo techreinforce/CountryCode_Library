@@ -3,12 +3,15 @@ package com.techreinforce.countypickerlibrary;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
+
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,14 +40,15 @@ import java.util.Locale;
  */
 public class CountryPicker extends DialogFragment implements Comparator<Country> {
 
-    private static final String TAG = "CountryPicker";
-    private EditText searchEditText;
-    private ListView countryListView;
-    private CountryListAdapter adapter;
-    private List<Country> allCountriesList;
-    private List<Country> selectedCountriesList;
-    private CountryPickerListener listener;
-    private Context context;
+  private static final String TAG = "CountryPicker";
+  private EditText searchEditText;
+  private ListView countryListView;
+  private CountryListAdapter adapter;
+  private List<Country> allCountriesList;
+  private List<Country> newAllCountriesList;
+  private List<Country> selectedCountriesList;
+  private CountryPickerListener listener;
+  private Context context;
 
     private static String readEncodedJsonString() throws java.io.IOException {
         byte[] data = Base64.decode(Constants.ENCODED_COUNTRY_CODE, Base64.DEFAULT);
@@ -87,17 +91,19 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
                     country.setMaxDigits(maxPhoneLength);
                     allCountriesList.add(country);
 //                    Utility.printLog(TAG + " country codes ");
-                }
-                Collections.sort(allCountriesList, this);
-                selectedCountriesList = new ArrayList<Country>();
-                selectedCountriesList.addAll(allCountriesList);
-                return allCountriesList;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
-        return null;
+        selectedCountriesList = new ArrayList<Country>();
+        selectedCountriesList.addAll(allCountriesList);
+        newAllCountriesList = new ArrayList<Country>();
+        newAllCountriesList.addAll(allCountriesList);
+        Collections.sort(newAllCountriesList, this);
+        return newAllCountriesList;
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     }
+    return null;
+  }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -108,15 +114,15 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
             String dialogTitle = args.getString("dialogTitle");
             getDialog().setTitle(dialogTitle);
 
-            int width = getResources().getDimensionPixelSize(R.dimen.dimen_300dp);
-            int height = getResources().getDimensionPixelSize(R.dimen.dimen_300dp);
-            getDialog().getWindow().setLayout(width, height);
-        }
-        getAllCountries();
-        searchEditText = view.findViewById(R.id.country_code_picker_search);
-        countryListView = view.findViewById(R.id.country_code_picker_listview);
-        adapter = new CountryListAdapter(getActivity(), selectedCountriesList);
-        countryListView.setAdapter(adapter);
+      int width = getResources().getDimensionPixelSize(R.dimen.dimen_300dp);
+      int height = getResources().getDimensionPixelSize(R.dimen.dimen_300dp);
+      getDialog().getWindow().setLayout(width, height);
+    }
+    getAllCountries();
+    searchEditText = view.findViewById(R.id.country_code_picker_search);
+    countryListView = view.findViewById(R.id.country_code_picker_listview);
+    adapter = new CountryListAdapter(getActivity(), newAllCountriesList);
+    countryListView.setAdapter(adapter);
 
         countryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -151,54 +157,55 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
         return view;
     }
 
-    @SuppressLint("DefaultLocale")
-    private void search(String text) {
-        selectedCountriesList.clear();
-        for (Country country : allCountriesList) {
-            if (country.getName().toLowerCase(Locale.ENGLISH).contains(text.toLowerCase())||country.getDialCode().toLowerCase(Locale.ENGLISH).contains(text.toLowerCase())) {
-                selectedCountriesList.add(country);
-            }
-        }
-        adapter.notifyDataSetChanged();
+  @SuppressLint("DefaultLocale")
+  private void search(String text) {
+    selectedCountriesList.clear();
+    for (Country country : newAllCountriesList) {
+      if (country.getName().toLowerCase(Locale.ENGLISH).contains(text.toLowerCase()) || country.getDialCode().toLowerCase(Locale.ENGLISH).contains(text.toLowerCase())) {
+        selectedCountriesList.add(country);
+      }
     }
+    adapter.notifyDataSetChanged();
+  }
 
     @Override
     public int compare(Country lhs, Country rhs) {
         return lhs.getName().compareTo(rhs.getName());
     }
 
-    public Country getUserCountryInfo(Context context) {
-        this.context = context;
-        getAllCountries();
-        String countryIsoCode;
-        TelephonyManager telephonyManager =
-                (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        countryIsoCode = telephonyManager.getNetworkCountryIso();
-        for (int i = 0; i < allCountriesList.size(); i++) {
-            Country country = allCountriesList.get(i);
-            if (country.getCode().equalsIgnoreCase(countryIsoCode)) {
-                country.setFlag(getFlagResId(country.getCode()));
-                return country;
-            }
-        }
-        return afghanistan();
+  public Country getUserCountryInfo(Context context) {
+    this.context = context;
+    getAllCountries();
+    String countryIsoCode;
+    TelephonyManager telephonyManager =
+        (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+    countryIsoCode = telephonyManager.getNetworkCountryIso();
+    for (int i = 0; i < newAllCountriesList.size(); i++) {
+      Country country = newAllCountriesList.get(i);
+      if (country.getCode().equalsIgnoreCase(countryIsoCode)) {
+        country.setFlag(getFlagResId(country.getCode()));
+        return country;
+      }
     }
-    public Country getUserCountryInfoLocal(Context context) {
-        this.context = context;
-        getAllCountries();
-        String countryIsoCode;
+    return afghanistan();
+  }
+
+  public Country getUserCountryInfoLocal(Context context) {
+    this.context = context;
+    getAllCountries();
+    String countryIsoCode;
 
 //        String locale = context.getResources().getConfiguration().locale.getCountry();  "US"
 //        String locale = context.getResources().getConfiguration().locale.getDisplayCountry();  "United States"
-        for (int i = 0; i < allCountriesList.size(); i++) {
-            Country country = allCountriesList.get(i);
-            if (country.getCode().equalsIgnoreCase(context.getResources().getConfiguration().locale.getCountry())) {
-                country.setFlag(getFlagResId(country.getCode()));
-                return country;
-            }
-        }
-        return afghanistan();
+    for (int i = 0; i < newAllCountriesList.size(); i++) {
+      Country country = newAllCountriesList.get(i);
+      if (country.getCode().equalsIgnoreCase(context.getResources().getConfiguration().locale.getCountry())) {
+        country.setFlag(getFlagResId(country.getCode()));
+        return country;
+      }
     }
+    return afghanistan();
+  }
 
     private Country afghanistan() {
         Country country = new Country();
@@ -232,15 +239,15 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
                 (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         countryIsoCode = telephonyManager.getNetworkCountryIso();*/
 //        String countryDialCode = countryDialCode;
-        for (int i = 0; i < allCountriesList.size(); i++) {
-            Country country = allCountriesList.get(i);
-            if (country.getDialCode().equalsIgnoreCase(countryDialCode)) {
-                country.setFlag(getFlagResId(country.getCode()));
-                return country;
-            }
-        }
-        return afghanistan();
+    for (int i = 0; i < newAllCountriesList.size(); i++) {
+      Country country = newAllCountriesList.get(i);
+      if (country.getDialCode().equalsIgnoreCase(countryDialCode)) {
+        country.setFlag(getFlagResId(country.getCode()));
+        return country;
+      }
     }
+    return afghanistan();
+  }
 
     public Country getCountryInfoFromCountryCode(Context context, String countryCode) {
         this.context = context;
@@ -251,15 +258,50 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
                 (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         countryIsoCode = telephonyManager.getNetworkCountryIso();*/
 //        String countryDialCode = countryCode;
-        for (int i = 0; i < allCountriesList.size(); i++) {
-            Country country = allCountriesList.get(i);
-            if (country.getCode().equalsIgnoreCase(countryCode)) {
-                country.setFlag(getFlagResId(country.getCode()));
-                return country;
-            }
-        }
-        return afghanistan();
+    for (int i = 0; i < newAllCountriesList.size(); i++) {
+      Country country = newAllCountriesList.get(i);
+      if (country.getCode().equalsIgnoreCase(countryCode)) {
+        country.setFlag(getFlagResId(country.getCode()));
+        return country;
+      }
     }
+    return afghanistan();
+  }
 
+  public void hideCountries(ArrayList<String> hideCountries) {
+    List<Country> finalAllCountriesList = new ArrayList<>();
+    finalAllCountriesList.addAll(allCountriesList);
+    for (int j = 0; j < hideCountries.size(); j++) {
+      for (int i = 0; i < finalAllCountriesList.size(); i++) {
+        if (finalAllCountriesList.get(i).getCode().equalsIgnoreCase(hideCountries.get(j))) {
+          finalAllCountriesList.remove(finalAllCountriesList.get(i));
+          break;
+        }
+      }
+    }
+    if (finalAllCountriesList != null && finalAllCountriesList.size()>0) {
+      newAllCountriesList.clear();
+      newAllCountriesList = finalAllCountriesList;
+    }
+    if (adapter != null) {
+      adapter.notifyDataSetChanged();
+    }
+  }
 
+  public void showCountries(ArrayList<String> hideCountries) {
+    newAllCountriesList.clear();
+    List<Country> finalAllCountriesList = new ArrayList<>();
+    finalAllCountriesList.addAll(allCountriesList);
+    for (int j = 0; j < hideCountries.size(); j++) {
+      for (int i = 0; i < finalAllCountriesList.size(); i++) {
+        if (finalAllCountriesList.get(i).getCode().equalsIgnoreCase(hideCountries.get(j))) {
+          newAllCountriesList.add(finalAllCountriesList.get(i));
+          break;
+        }
+      }
+    }
+    if (adapter != null) {
+      adapter.notifyDataSetChanged();
+    }
+  }
 }
