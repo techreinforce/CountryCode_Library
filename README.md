@@ -4,6 +4,6 @@ for example:
 
 dependencies {
 
-implementation 'com.github.techreinforce:SDP:1.0.0'
+ implementation 'com.github.techreinforce:CountryCode_Library:+'
 
 }
