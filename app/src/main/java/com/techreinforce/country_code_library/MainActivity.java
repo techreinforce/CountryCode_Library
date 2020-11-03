@@ -53,11 +53,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void findData(View view) {
         ArrayList<String> arrayList = new ArrayList<>();
-        arrayList.add("PH");
-        arrayList.add("MY");
-        arrayList.add("AU");
-        mCountryPicker.showCountries(arrayList);
-//        mCountryPicker.hideCountries(arrayList);
+        arrayList.add("IL");
+        arrayList.add("ISR");
+        mCountryPicker.hideCountries(arrayList);
 
         Country country = mCountryPicker.getCountryInfo(this, editText.getText().toString());
         Log.d("sfgsdffdgdf1", String.valueOf(country.getCode()));

@@ -154,18 +154,25 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
       }
     });
 
+    search("India");
     return view;
   }
 
   @SuppressLint("DefaultLocale")
   private void search(String text) {
-    selectedCountriesList.clear();
+    List<Country> searchCountriesList = new ArrayList<>();
     for (Country country : newAllCountriesList) {
-      if (country.getName().toLowerCase(Locale.ENGLISH).contains(text.toLowerCase()) || country.getDialCode().toLowerCase(Locale.ENGLISH).contains(text.toLowerCase())) {
-        selectedCountriesList.add(country);
+      if (country.getName().toLowerCase(Locale.ENGLISH).contains(text.toLowerCase())||country.getDialCode().toLowerCase(Locale.ENGLISH).contains(text.toLowerCase())) {
+        searchCountriesList.add(country);
       }
     }
-    adapter.notifyDataSetChanged();
+    if (searchCountriesList!=null && searchCountriesList.size()>0) {
+      newAllCountriesList.clear();
+      newAllCountriesList.addAll(searchCountriesList);
+    }
+    if (adapter != null) {
+      adapter.notifyDataSetChanged();
+    }
   }
 
   @Override
