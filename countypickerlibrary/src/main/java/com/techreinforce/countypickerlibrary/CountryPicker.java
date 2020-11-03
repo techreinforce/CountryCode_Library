@@ -119,6 +119,7 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
       getDialog().getWindow().setLayout(width, height);
     }
     getAllCountries();
+
     searchEditText = view.findViewById(R.id.country_code_picker_search);
     countryListView = view.findViewById(R.id.country_code_picker_listview);
     adapter = new CountryListAdapter(getActivity(), newAllCountriesList);
@@ -142,6 +143,7 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
 
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count) {
+        adapter.getFilter().filter(s.toString());
       }
 
       @Override
@@ -150,18 +152,17 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
 
       @Override
       public void afterTextChanged(Editable s) {
-        search(s.toString());
+//        search(s.toString());
       }
     });
 
-    search("India");
     return view;
   }
 
   @SuppressLint("DefaultLocale")
   private void search(String text) {
     List<Country> searchCountriesList = new ArrayList<>();
-    for (Country country : newAllCountriesList) {
+    for (Country country : allCountriesList) {
       if (country.getName().toLowerCase(Locale.ENGLISH).contains(text.toLowerCase())||country.getDialCode().toLowerCase(Locale.ENGLISH).contains(text.toLowerCase())) {
         searchCountriesList.add(country);
       }
